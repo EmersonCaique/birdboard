@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 
 class ProjectController extends Controller
 {
+    public function index(){
+        $projects = auth()->user();
+        return view('pages.project.index', compact('projects'));
+    }
+
     public function store(){
         $this->validate(request(), [
             'title' => 'required',

@@ -26,6 +26,7 @@ class ProjectController extends Controller
     }
 
     public function show(Project $project){
+        abort_if(auth()->user() != $project->owner);
         return view('pages.project.show', compact('project'));
     }
 

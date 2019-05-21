@@ -10,6 +10,32 @@ class ProjectsTest extends TestCase
 {
 
     use RefreshDatabase, WithFaker;
+
+    /**
+     * @test
+     */
+    public function guest_cannot_not_view_projects(){
+        $this->get('project')->assertRedirect('login');
+    }
+
+    /**
+     * @test
+     */
+    public function guest_cannot_not_view_a_single_project(){
+        $project = factory('App\Project')->create();
+        $this->get(route('project.show', ['project' => $project->id ]))->assertRedirect('login');
+    }
+
+    /**
+     * @test
+     */
+    public function guest_cannot_not_craete_a_project(){
+        $project = factory('App\Project')->raw();
+        $this->get('project', $project)->assertRedirect('login');
+    }
+
+
+
     /**
      * @test
      */
@@ -26,8 +52,11 @@ class ProjectsTest extends TestCase
     /**
      * @test
      */
-    public function a_user_can_view_a_project(){
-        $project = factory('App\Project')->create();
+    public function a_user_can_view_their_project(){
+        $this->be(factory('App\User')->create());
+        $project = factory('App\Project')->make();
+        auth()->user()->projects()->save($project);
+
         $response = $this->get(route('project.show', ['project' => $project->id ]));
         $response->assertSee('title');
 
@@ -37,6 +66,8 @@ class ProjectsTest extends TestCase
      * @test
      */
     public function a_project_requires_a_title(){
+        $this->actingAs(factory('App\User')->create());
+
         $project = factory('App\Project')->raw(['title' => '']);
         $request =  $this->post('project', $project);
         $request->assertSessionHasErrors('title');
@@ -47,6 +78,8 @@ class ProjectsTest extends TestCase
      * @test
      */
     public function a_project_requires_a_description(){
+        $this->actingAs(factory('App\User')->create());
+
         $project = factory('App\Project')->raw(['description' => '']);
         $request =  $this->post('project', $project);
         $request->assertSessionHasErrors('description');

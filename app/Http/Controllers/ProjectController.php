@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class ProjectController extends Controller
 {
     public function index(){
-        $projects = auth()->user();
+        $projects = auth()->user()->projects;
         return view('pages.project.index', compact('projects'));
     }
 
@@ -26,7 +26,7 @@ class ProjectController extends Controller
     }
 
     public function show(Project $project){
-        abort_if(auth()->user() != $project->owner);
+        abort_if(auth()->user() != $project->owner, 403);
         return view('pages.project.show', compact('project'));
     }
 

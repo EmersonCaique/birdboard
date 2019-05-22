@@ -12,9 +12,11 @@
         <div class="lg:w-3/4 px-3 mb-6">
             <div class="mb-4">
                 <h2 class="text-lg  font-normal">Tasks</h2>
-                <div class="card">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo expedita ipsum nesciunt
-                    asperiores ipsam accusantium corporis laudantium nobis ipsa, aut mollitia voluptatem quas, est ea
-                    sed saepe necessitatibus accusamus quaerat?</div>
+                    @forelse ($project->tasks as $task)
+                        <div class="card"> {{ $task->body }}</div>
+                    @empty
+                       <div class="card"> Nothing to show</div>
+                    @endforelse
             </div>
             <div>
                 <h2 class="text-lg  font-normal">General Notes</h2>

@@ -40,7 +40,7 @@ class ProjectsTest extends TestCase
      * @test
      */
     public function a_user_can_create_a_project(){
-        $this->actingAs(factory('App\User')->create());
+        $this->auth();
 
         $project = ['title' => $this->faker->word, 'description' => $this->faker->sentence];
         $request =  $this->post('project', $project);
@@ -53,7 +53,8 @@ class ProjectsTest extends TestCase
      * @test
      */
     public function a_user_can_view_their_project(){
-        $this->be(factory('App\User')->create());
+        $this->auth();
+
         $project = factory('App\Project')->make();
         auth()->user()->projects()->save($project);
 
@@ -66,7 +67,7 @@ class ProjectsTest extends TestCase
      * @test
      */
     public function a_project_requires_a_title(){
-        $this->actingAs(factory('App\User')->create());
+        $this->auth();
 
         $project = factory('App\Project')->raw(['title' => '']);
         $request =  $this->post('project', $project);
@@ -78,7 +79,8 @@ class ProjectsTest extends TestCase
      * @test
      */
     public function a_project_requires_a_description(){
-        $this->actingAs(factory('App\User')->create());
+        // $this->actingAs(factory('App\User')->create());
+        $this->auth();
 
         $project = factory('App\Project')->raw(['description' => '']);
         $request =  $this->post('project', $project);

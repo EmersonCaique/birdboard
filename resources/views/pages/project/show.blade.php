@@ -3,7 +3,7 @@
 
 <header class="flex items-end justify-between my-6">
     <p class="text-grey text-sm">
-            <a href="{{ route('project.index') }}">My Projects</a> / {{ $project->title }}
+        <a href="{{ route('project.index') }}">My Projects</a> / {{ $project->title }}
     </p>
     <a href="{{ route('project.create')}}" class="button">New project</a>
 </header>
@@ -12,15 +12,20 @@
         <div class="lg:w-3/4 px-3 mb-6">
             <div class="mb-4">
                 <h2 class="text-lg  font-normal">Tasks</h2>
-                    @forelse ($project->tasks as $task)
-                        <div class="card"> {{ $task->body }}</div>
-                    @empty
-                       <div class="card"> Nothing to show</div>
-                    @endforelse
+                @for($project->tasks as $task)
+                    <div class="card mb-3"> {{ $task->body }}</div>
+                @endfor
+                <div class="card">
+                    <form action="{{ route('project.task.store', ['project' => $project->id ]) }}" method="post">
+                        @csrf
+                        <input type="text" class="w-full" placeholder="Begin adding tasks..." name="body" required>
+                    </form>
+                </div>
             </div>
             <div>
                 <h2 class="text-lg  font-normal">General Notes</h2>
-                <textarea class="card w-full" style="min-height: 200px">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptatem sequi laboriosam fuga consequatur aperiam veritatis debitis tempora aliquid tenetur voluptatum, expedita iste a dicta inventore quis explicabo voluptatibus eos beatae.</textarea>
+                <textarea class="card w-full"
+                    style="min-height: 200px">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptatem sequi laboriosam fuga consequatur aperiam veritatis debitis tempora aliquid tenetur voluptatum, expedita iste a dicta inventore quis explicabo voluptatibus eos beatae.</textarea>
             </div>
         </div>
         <div class="lg:w-1/4 px-3">

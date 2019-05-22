@@ -44,4 +44,21 @@ class ProjectTaskTest extends TestCase
         $response = $this->post(route('project.task.store', ['project' => $project->id ]), $task);
         $response->assertSessionHasErrors('body');
     }
+
+    /**
+     * @test
+     */
+     public function only_the_owner_of_project_may_add_tasks(){
+        $this->auth();
+
+        $project = factory('App\Project')->create();
+        $task = factory('App\Task')->raw(['body' => 'Test body']);
+
+        $response = $this->post(route('project.task.store', ['project' => $project->id ]), $task);
+        $response->assertStatus(403);
+
+        $this->assertDatabaseMissing('tasks', $task);
+
+
+     }
 }

@@ -25,3 +25,7 @@
 
     box-shadow: 0 2px 7px 0 #47cdff;
 }
+
+.card {
+    @apply .bg-white .p-5 .rounded-lg .shadow
+}

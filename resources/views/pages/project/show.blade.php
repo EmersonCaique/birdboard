@@ -12,9 +12,21 @@
         <div class="lg:w-3/4 px-3 mb-6">
             <div class="mb-4">
                 <h2 class="text-lg  font-normal">Tasks</h2>
-                @for($project->tasks as $task)
-                    <div class="card mb-3"> {{ $task->body }}</div>
-                @endfor
+                @foreach($project->tasks as $task)
+                    <div class="card mb-2">
+                        <form method="POST"
+                            action=" {{ route('project.task.update', ['project' => $project->id, 'task' => $task->id]) }} ">
+                            @method('put')
+                            @csrf
+                            <div class="flex {{ $task->completed ? 'text-grey' : '' }}">
+                                <input type="text" class="w-full" value="{{ $task->body }}" name="body" required>
+                                <input type="checkbox" name="completed" onclick="this.form.submit()" {{ $task->completed ? 'checked' : '' }}>
+                            </div>
+
+
+                        </form>
+                    </div>
+                @endforeach
                 <div class="card">
                     <form action="{{ route('project.task.store', ['project' => $project->id ]) }}" method="post">
                         @csrf

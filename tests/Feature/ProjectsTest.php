@@ -14,14 +14,14 @@ class ProjectsTest extends TestCase
     /**
      * @test
      */
-    public function guest_cannot_not_view_projects(){
+    public function guest_cannot_view_projects(){
         $this->get('project')->assertRedirect('login');
     }
 
     /**
      * @test
      */
-    public function guest_cannot_not_view_a_single_project(){
+    public function guest_cannot_view_a_single_project(){
         $project = factory('App\Project')->create();
         $this->get(route('project.show', ['project' => $project->id ]))->assertRedirect('login');
     }
@@ -29,7 +29,7 @@ class ProjectsTest extends TestCase
     /**
      * @test
      */
-    public function guest_cannot_not_craete_a_project(){
+    public function guest_cannot_craete_a_project(){
         $project = factory('App\Project')->raw();
         $this->get('project', $project)->assertRedirect('login');
     }

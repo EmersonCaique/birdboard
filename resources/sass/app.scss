@@ -13,3 +13,15 @@
 @tailwind components;
 
 @tailwind utilities;
+
+.button {
+    @apply .bg-blue;
+    @apply .text-white;
+    @apply .no-underline;
+    @apply .rounded-lg;
+    @apply .px-5;
+    @apply .py-2;
+
+
+    box-shadow: 0 2px 7px 0 #47cdff;
+}

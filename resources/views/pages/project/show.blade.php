@@ -36,8 +36,12 @@
             </div>
             <div>
                 <h2 class="text-lg  font-normal">General Notes</h2>
-                <textarea class="card w-full"
-                    style="min-height: 200px">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptatem sequi laboriosam fuga consequatur aperiam veritatis debitis tempora aliquid tenetur voluptatum, expedita iste a dicta inventore quis explicabo voluptatibus eos beatae.</textarea>
+                <form action=" {{ route('project.update', ['project' => $project->id ]) }} " method="post">
+                    @csrf
+                    @method('put')
+                    <textarea class="card w-full"style="min-height: 200px" name="notes">{{ $project->notes }}</textarea>
+                    <button class="button" type="submit">Save</button>
+                </form>
             </div>
         </div>
         <div class="lg:w-1/4 px-3">

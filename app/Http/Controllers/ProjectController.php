@@ -7,27 +7,44 @@ use Illuminate\Http\Request;
 
 class ProjectController extends Controller
 {
-    public function index(){
-        $projects = auth()->user()->projects;
+    public function index()
+    {
+        $projects = auth()->user()->projects()->orderBy('updated_at', 'desc')->get();
+
         return view('pages.project.index', compact('projects'));
     }
 
-    public function store(){
+    public function store()
+    {
         $this->validate(request(), [
             'title' => 'required',
-            'description' => 'required'
+            'description' => 'required',
+            'notes' => 'required',
         ]);
 
-        $project = new Project;
+        $project = new Project();
         $project->fill(request()->all());
         auth()->user()->projects()->save($project);
 
         return redirect('project');
     }
 
-    public function show(Project $project){
-        abort_if(!auth()->user()->projects->contains($project), 403);
+    public function show(Project $project)
+    {
+        $this->authorize('update', $project);
+
         return view('pages.project.show', compact('project'));
     }
 
+    public function update(Project $project)
+    {
+        $this->authorize('update', $project);
+        $error = $this->validate(request(), [
+            'notes' => 'min:3',
+        ]);
+
+        $project->update(request()->all());
+
+        return redirect()->route('project.show', ['project' => $project->id]);
+    }
 }

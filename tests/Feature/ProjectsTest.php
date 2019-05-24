@@ -75,6 +75,23 @@ class ProjectsTest extends TestCase
     /**
      * @test
      */
+    public function a_user_can_update_a_project_notes()
+    {
+        $project = ProjectFactory::ownedUser($this->auth())->create();
+
+        $request = $this->put(route('project.update', ['project' => $project->id]), [
+            'notes' => 'note updated',
+        ]);
+        $request->assertStatus(302);
+
+        $this->assertDatabaseHas('projects', [
+            'notes' => 'note updated',
+        ]);
+    }
+
+    /**
+     * @test
+     */
     public function a_user_can_view_their_project()
     {
         $this->auth();

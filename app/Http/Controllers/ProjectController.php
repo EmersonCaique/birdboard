@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Project;
-use Illuminate\Http\Request;
+use App\Http\Requests\ProjectRequest;
 
 class ProjectController extends Controller
 {
@@ -14,16 +14,10 @@ class ProjectController extends Controller
         return view('pages.project.index', compact('projects'));
     }
 
-    public function store()
+    public function store(ProjectRequest $request)
     {
-        $this->validate(request(), [
-            'title' => 'required',
-            'description' => 'required',
-            'notes' => 'nullable',
-        ]);
-
         $project = new Project();
-        $project->fill(request()->all());
+        $project->fill($request->all());
         auth()->user()->projects()->save($project);
 
         return redirect('project');
@@ -48,14 +42,11 @@ class ProjectController extends Controller
         return view('pages.project.create');
     }
 
-    public function update(Project $project)
+    public function update(Project $project, ProjectRequest $request)
     {
         $this->authorize('update', $project);
-        $error = $this->validate(request(), [
-            'notes' => 'min:3',
-        ]);
 
-        $project->update(request()->all());
+        $project->update($request->all());
 
         return redirect()->route('project.show', ['project' => $project->id]);
     }

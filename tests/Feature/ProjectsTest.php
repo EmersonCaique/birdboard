@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
+use Facades\Tests\Setup\ProjectFactory;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -42,7 +43,6 @@ class ProjectsTest extends TestCase
     public function a_user_can_create_a_project()
     {
         $this->auth();
-        $this->withoutExceptionHandling();
 
         $project = ['title' => $this->faker->word, 'description' => $this->faker->sentence, 'notes' => $this->faker->sentence];
         $request = $this->post('project', $project);
@@ -56,11 +56,9 @@ class ProjectsTest extends TestCase
      */
     public function a_user_can_update_a_project()
     {
-        $this->auth();
-        // $this->withoutExceptionHandling();
+        $project = ProjectFactory::ownedUser($this->auth())->create();
 
         $projectEdited = factory('App\Project')->make();
-        $project = auth()->user()->projects()->save(factory('App\Project')->make());
 
         $request = $this->put(route('project.update', ['project' => $project->id]), ['notes' => 'note updated']);
         $request->assertStatus(302);

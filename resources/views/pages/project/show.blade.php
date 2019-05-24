@@ -5,7 +5,7 @@
     <p class="text-grey text-sm">
         <a href="{{ route('project.index') }}">My Projects</a> / {{ $project->title }}
     </p>
-    <a href="{{ route('project.create')}}" class="button">New project</a>
+    <a href="{{ route('project.edit', ['project' => $project->id ])}}" class="button">Update project</a>
 </header>
 <main>
     <div class="lg:flex -mx-3">
@@ -22,8 +22,6 @@
                                 <input type="text" class="w-full" value="{{ $task->body }}" name="body" required>
                                 <input type="checkbox" name="completed" onclick="this.form.submit()" {{ $task->completed ? 'checked' : '' }}>
                             </div>
-
-
                         </form>
                     </div>
                 @endforeach

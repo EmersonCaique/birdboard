@@ -19,7 +19,7 @@ class ProjectController extends Controller
         $this->validate(request(), [
             'title' => 'required',
             'description' => 'required',
-            'notes' => 'required',
+            'notes' => 'nullable',
         ]);
 
         $project = new Project();
@@ -34,6 +34,18 @@ class ProjectController extends Controller
         $this->authorize('update', $project);
 
         return view('pages.project.show', compact('project'));
+    }
+
+    public function edit(Project $project)
+    {
+        $this->authorize('update', $project);
+
+        return view('pages.project.edit', compact('project'));
+    }
+
+    public function create()
+    {
+        return view('pages.project.create');
     }
 
     public function update(Project $project)

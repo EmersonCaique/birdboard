@@ -60,7 +60,11 @@ class ProjectsTest extends TestCase
 
         $projectEdited = factory('App\Project')->make();
 
-        $request = $this->put(route('project.update', ['project' => $project->id]), ['notes' => 'note updated']);
+        $request = $this->put(route('project.update', ['project' => $project->id]), [
+            'notes' => 'note updated',
+            'description' => 'description updated',
+            'title' => 'title updated',
+        ]);
         $request->assertStatus(302);
 
         $this->assertDatabaseHas('projects', [

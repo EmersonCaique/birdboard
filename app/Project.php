@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Project extends Model
 {
-    protected $fillable = ['title','description','notes'];
+    protected $fillable = ['title', 'description', 'notes'];
 
     public function owner()
     {
@@ -21,5 +21,10 @@ class Project extends Model
     public function addTask($body)
     {
         return $this->tasks()->create(compact('body'));
+    }
+
+    public function activity()
+    {
+        return $this->hasMany(Activity::class);
     }
 }

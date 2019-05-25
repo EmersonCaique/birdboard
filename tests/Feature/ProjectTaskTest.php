@@ -38,12 +38,53 @@ class ProjectTaskTest extends TestCase
 
         $this->put(route('project.task.update', ['project' => $project->id, 'task' => $task->id]), [
             'body' => 'change test',
+        ]);
+
+        $this->assertDatabaseHas('tasks', [
+            'body' => 'change test',
+        ]);
+    }
+
+    /**
+     * @test
+     */
+    public function a_task_can_be_completed()
+    {
+        $project = ProjectFactory::ownedUser($this->auth())->create();
+        $task = $project->addTask('update test');
+
+        $this->put(route('project.task.update', ['project' => $project->id, 'task' => $task->id]), [
+            'body' => 'change test',
             'completed' => true,
         ]);
 
         $this->assertDatabaseHas('tasks', [
             'body' => 'change test',
             'completed' => true,
+        ]);
+    }
+
+    /**
+     * @test
+     */
+    public function a_task_can_be_marked_as_incomplete()
+    {
+        $project = ProjectFactory::ownedUser($this->auth())->create();
+        $task = $project->addTask('update test');
+
+        $this->put(route('project.task.update', ['project' => $project->id, 'task' => $task->id]), [
+            'body' => 'change test',
+            'completed' => true,
+        ]);
+
+        $this->put(route('project.task.update', ['project' => $project->id, 'task' => $task->id]), [
+            'body' => 'change test',
+            'completed' => false,
+        ]);
+
+        $this->assertDatabaseHas('tasks', [
+            'body' => 'change test',
+            'completed' => false,
         ]);
     }
 

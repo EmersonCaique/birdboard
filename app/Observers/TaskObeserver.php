@@ -9,8 +9,13 @@ class TaskObeserver
         $task->project->recordActivity('created_task');
     }
 
-    public function updated($task)
+    public function deleted($task)
     {
-        $task->project->recordActivity('updated_task');
+        $task->project->recordActivity('deleted_task');
     }
+
+    // public function updated($task)
+    // {
+    //     $task->project->recordActivity('updated_task');
+    // }
 }

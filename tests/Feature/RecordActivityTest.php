@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Facades\Tests\Setup\ProjectFactory;
+use App\Task;
 
 class RecordActivityTest extends TestCase
 {
@@ -43,6 +44,12 @@ class RecordActivityTest extends TestCase
         $project = ProjectFactory::create();
         $project->addTask('Task');
 
+        tap($project->activity->last(), function ($activity) {
+            $this->assertEquals('created_task', $activity->description);
+            $this->assertInstanceOf(Task::class, $activity->subject);
+            $this->assertEquals('Task', $activity->subject->body);
+        });
+
         $this->assertCount(2, $project->activity);
     }
 
@@ -59,6 +66,11 @@ class RecordActivityTest extends TestCase
                 'body' => 'test',
                 'completed' => true,
             ]);
+
+        tap($project->activity->last(), function ($activity) {
+            $this->assertEquals('completed_task', $activity->description);
+            $this->assertInstanceOf(Task::class, $activity->subject);
+        });
 
         $this->assertCount(3, $project->activity);
     }

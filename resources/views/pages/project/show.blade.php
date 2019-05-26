@@ -44,6 +44,7 @@
         </div>
         <div class="lg:w-1/4 px-3">
             @include('pages.project.card')
+            @include('pages.project.activity.card')
         </div>
     </div>
 </main>

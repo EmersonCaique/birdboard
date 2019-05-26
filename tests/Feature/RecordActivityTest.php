@@ -17,9 +17,15 @@ class RecordActivityTest extends TestCase
     public function creating_a_project()
     {
         $project = ProjectFactory::create();
+        $orignalTitle = $project->title;
 
         $this->assertCount(1, $project->activity);
         $this->assertEquals('created', $project->activity->first()->description);
+
+        tap($project->activity->last(), function ($activity) use ($orignalTitle) {
+            $this->assertEquals('created', $activity->description);
+            $this->assertNull($activity->changes);
+        });
     }
 
     /**
@@ -28,9 +34,20 @@ class RecordActivityTest extends TestCase
     public function update_a_project()
     {
         $project = ProjectFactory::create();
-        $project->update([
-            'title' => 'change',
-        ]);
+        $orignalTitle = $project->title;
+
+        $project->update(['title' => 'change']);
+
+        tap($project->activity->last(), function ($activity) use ($orignalTitle) {
+            $this->assertEquals('updated', $activity->description);
+
+            $expected = [
+                'before' => ['title' => $orignalTitle],
+                'after' => ['title' => 'change'],
+            ];
+
+            $this->assertEquals($expected, $activity->changes);
+        });
 
         $this->assertCount(2, $project->activity);
         $this->assertEquals('updated', $project->activity->last()->description);

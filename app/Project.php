@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Project extends Model
 {
     protected $fillable = ['title', 'description', 'notes'];
+    public $old = [];
 
     public function owner()
     {
@@ -30,6 +31,17 @@ class Project extends Model
 
     public function recordActivity($description)
     {
-        $this->activity()->create(['description' => $description]);
+        $this->activity()->create([
+            'description' => $description,
+            'changes' => $description == 'updated' ? $this->changes() : null,
+        ]);
+    }
+
+    private function changes()
+    {
+        return  [
+            'before' => array_diff($this->old, $this->getAttributes()),
+            'after' => array_diff($this->getAttributes(), $this->old),
+        ];
     }
 }

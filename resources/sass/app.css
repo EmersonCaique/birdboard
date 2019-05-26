@@ -1,0 +1,19 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+.button {
+  @apply .bg-blue;
+  @apply .text-white;
+  @apply .no-underline;
+  @apply .rounded-lg;
+  @apply .px-5;
+  @apply .py-2;
+  -webkit-box-shadow: 0 2px 7px 0 #47cdff;
+          box-shadow: 0 2px 7px 0 #47cdff;
+}
+
+.card {
+  @apply .bg-white .p-5 .rounded-lg .shadow;
+}
+/*# sourceMappingURL=app.css.map */

@@ -3,12 +3,15 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\RecordActivity;
 
 class Task extends Model
 {
     protected $fillable = ['body', 'completed'];
-
     protected $touches = ['project'];
+    protected static $recordableEvents = ['created', 'deleted'];
+
+    use RecordActivity;
 
     public function project()
     {
@@ -31,13 +34,5 @@ class Task extends Model
     public function activity()
     {
         return $this->morphMany(Activity::class, 'subject');
-    }
-
-    public function recordActivity($description)
-    {
-        $this->activity()->create([
-            'description' => $description,
-            'project_id' => $this->project->id,
-        ]);
     }
 }

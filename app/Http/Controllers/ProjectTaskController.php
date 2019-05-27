@@ -10,7 +10,7 @@ class ProjectTaskController extends Controller
 {
     public function store(Project $project, TaskRequest $request)
     {
-        abort_if(auth()->user()->isNot($project->owner), 403);
+    $this->authorize('update', $project);
 
         $project->addTask(request('body'));
 

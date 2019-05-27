@@ -3,9 +3,12 @@
 namespace Tests\Unit;
 
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ProjectTest extends TestCase
 {
+    use RefreshDatabase;
+
     /**
      * @test
      */
@@ -28,5 +31,14 @@ class ProjectTest extends TestCase
         $this->assertDatabaseHas('tasks', [
             'body' => 'Body',
         ]);
+    }
+
+    /** @test */
+    public function it_can_invite_a_user()
+    {
+        $project = factory('App\Project')->create();
+        $project->invite($user = factory('App\User')->create());
+
+        $this->assertTrue($project->members->contains($user));
     }
 }

@@ -5,7 +5,13 @@
     <p class="text-grey text-sm">
         <a href="{{ route('project.index') }}">My Projects</a> / {{ $project->title }}
     </p>
-    <a href="{{ route('project.edit', ['project' => $project->id ])}}" class="button">Update project</a>
+    <div class="flex items-center">
+        @foreach ($project->members as $member)
+        <img src="{{ gravatar_email($member->email)}}" alt="{{ $member->name}} avatar" class="rounded-full w-8 mr-1">
+        @endforeach
+
+        <a href="{{ route('project.edit', ['project' => $project->id ])}}" class="button ml-6">Update project</a>
+    </div>
 </header>
 <main>
     <div class="lg:flex -mx-3">
@@ -13,17 +19,18 @@
             <div class="mb-4">
                 <h2 class="text-lg  font-normal">Tasks</h2>
                 @foreach($project->tasks as $task)
-                    <div class="card mb-2">
-                        <form method="POST"
-                            action=" {{ route('project.task.update', ['project' => $project->id, 'task' => $task->id]) }} ">
-                            @method('put')
-                            @csrf
-                            <div class="flex {{ $task->completed ? 'text-grey' : '' }}">
-                                <input type="text" class="w-full" value="{{ $task->body }}" name="body" required>
-                                <input type="checkbox" name="completed" onclick="this.form.submit()" {{ $task->completed ? 'checked' : '' }}>
-                            </div>
-                        </form>
-                    </div>
+                <div class="card mb-2">
+                    <form method="POST"
+                        action=" {{ route('project.task.update', ['project' => $project->id, 'task' => $task->id]) }} ">
+                        @method('put')
+                        @csrf
+                        <div class="flex {{ $task->completed ? 'text-grey' : '' }}">
+                            <input type="text" class="w-full" value="{{ $task->body }}" name="body" required>
+                            <input type="checkbox" name="completed" onclick="this.form.submit()"
+                                {{ $task->completed ? 'checked' : '' }}>
+                        </div>
+                    </form>
+                </div>
                 @endforeach
                 <div class="card">
                     <form action="{{ route('project.task.store', ['project' => $project->id ]) }}" method="post">
@@ -37,7 +44,8 @@
                 <form action=" {{ route('project.update', ['project' => $project->id ]) }} " method="post">
                     @csrf
                     @method('put')
-                    <textarea class="card w-full"style="min-height: 200px" name="notes">{{ $project->notes }}</textarea>
+                    <textarea class="card w-full" style="min-height: 200px"
+                        name="notes">{{ $project->notes }}</textarea>
                     <button class="button" type="submit">Save</button>
                 </form>
             </div>

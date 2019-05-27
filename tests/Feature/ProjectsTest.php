@@ -75,6 +75,37 @@ class ProjectsTest extends TestCase
     /**
      * @test
      */
+    public function a_user_can_delete_a_project()
+    {
+        $project = ProjectFactory::ownedUser($this->auth())->create();
+        $request = $this->delete("project/$project->id");
+        $request
+            ->assertStatus(302)
+            ->assertRedirect('/project');
+
+        $this->assertDatabaseMissing('projects', $project->only('id'));
+    }
+
+    /**
+     * @test
+     */
+    public function unauthorized_cannot_delete_a_project()
+    {
+        $project = ProjectFactory::create();
+        $request = $this->delete("project/$project->id");
+        $request->assertRedirect('/login');
+
+        $this->auth();
+        $request = $this
+                    ->delete("project/$project->id")
+                    ->assertStatus(403);
+
+        $this->assertDatabaseHas('projects', $project->only('id'));
+    }
+
+    /**
+     * @test
+     */
     public function a_user_can_update_a_project_notes()
     {
         $project = ProjectFactory::ownedUser($this->auth())->create();

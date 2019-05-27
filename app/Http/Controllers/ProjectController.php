@@ -50,4 +50,12 @@ class ProjectController extends Controller
 
         return redirect()->route('project.show', ['project' => $project->id]);
     }
+
+    public function destroy(Project $project)
+    {
+        $this->authorize('update', $project);
+        $project->delete();
+
+        return redirect('project');
+    }
 }

@@ -9,7 +9,7 @@ class ProjectController extends Controller
 {
     public function index()
     {
-        $projects = auth()->user()->projects()->orderBy('updated_at', 'desc')->get();
+        $projects = auth()->user()->accessibleProjects();
 
         return view('pages.project.index', compact('projects'));
     }

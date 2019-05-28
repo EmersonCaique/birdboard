@@ -54,6 +54,16 @@ class ProjectsTest extends TestCase
     /**
      * @test
      */
+    public function a_user_can_see_all_projects_they_have_been_invitedto_on_their_dashboar()
+    {
+        $this->withoutExceptionHandling();
+        $project = tap(ProjectFactory::create())->invite($this->auth());
+        $this->get('project')->assertSee($project->title);
+    }
+
+    /**
+     * @test
+     */
     public function a_user_can_update_a_project()
     {
         $project = ProjectFactory::ownedUser($this->auth())->create();

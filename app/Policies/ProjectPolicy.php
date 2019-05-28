@@ -14,4 +14,9 @@ class ProjectPolicy
     {
         return $user->is($project->owner) || $project->members->contains($user);
     }
+
+    public function manage($user, $project)
+    {
+        return $user->is($project->owner);
+    }
 }

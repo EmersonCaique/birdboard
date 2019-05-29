@@ -5,11 +5,13 @@
             </h3>
             <div class="text-grey">{{ str_limit($project->description) }}</div>
         </div>
-        <div class="text-right">
-            <form action="{{ route('project.destroy', ['project' => $project->id ]) }}" method="post">
-                @csrf
-                @method('delete')
-                <button type="submit" class="text-xs text-grey ">Delete</button>
-            </form>
-        </div>
+        @can('manage', $project)
+            <div class="text-right">
+                <form action="{{ route('project.destroy', ['project' => $project->id ]) }}" method="post">
+                    @csrf
+                    @method('delete')
+                    <button type="submit" class="text-xs text-grey ">Delete</button>
+                </form>
+            </div>
+        @endcan
     </div>

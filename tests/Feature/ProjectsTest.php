@@ -24,7 +24,7 @@ class ProjectsTest extends TestCase
      */
     public function guest_cannot_view_a_single_project()
     {
-        $project = factory('App\Project')->create();
+        $project = factory('App\Project')->create(['owner_id' => factory('App\User')->create()]);
         $this->get(route('project.show', ['project' => $project->id]))->assertRedirect('login');
     }
 
@@ -44,7 +44,7 @@ class ProjectsTest extends TestCase
     {
         $this->auth();
 
-        $project = ['title' => $this->faker->word, 'description' => $this->faker->sentence, 'notes' => $this->faker->sentence];
+        $project = factory('App\Project')->raw();
         $request = $this->post('project', $project);
         $request->assertStatus(302);
 
@@ -102,13 +102,21 @@ class ProjectsTest extends TestCase
     public function unauthorized_cannot_delete_a_project()
     {
         $project = ProjectFactory::create();
-        $request = $this->delete("project/$project->id");
-        $request->assertRedirect('/login');
+        $this
+            ->delete("project/$project->id")
+            ->assertRedirect('/login');
 
-        $this->auth();
-        $request = $this
-                    ->delete("project/$project->id")
-                    ->assertStatus(403);
+        $user = $this->auth();
+        $this
+            ->delete("project/$project->id")
+            ->assertStatus(403);
+
+        $project->invite($user);
+
+        $this
+            ->actingAs($user)
+            ->delete("project/$project->id")
+            ->assertStatus(403);
 
         $this->assertDatabaseHas('projects', $project->only('id'));
     }

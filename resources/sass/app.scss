@@ -29,3 +29,21 @@
 .card {
     @apply .bg-white .p-5 .rounded-lg .shadow
 }
+
+
+.theme-light {
+    --page-bg-color: #F5F6F9;
+    --card-bg-color: white;
+    --button-bg-color: blue;
+    --nav-bg-color: white;
+
+}
+
+.theme-dark {
+    --page-bg-color: #17181E;
+    --card-bg-color: #1F2027;
+    --button-bg-color: #59B6F9;
+    --nav-bg-color: #1F2027;
+    --text-default-color:white;
+
+}

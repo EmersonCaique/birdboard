@@ -21,9 +21,9 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 
-<body class="bg-grey-light">
+<body class="bg-page theme-dark">
     <div id="app">
-        <nav class="bg-white shadow-sm">
+        <nav class="bg-nav shadow-sm">
             <div class="container mx-auto">
                 <div class="flex justify-between items-center py-2">
                     <h1>

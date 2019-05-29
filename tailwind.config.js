@@ -14,6 +14,7 @@ module.exports = {
         'white' : '#ffff',
         'grey' : 'rgba(0,0,0,0.4)',
         'red' : '#B20000',
+        'black' : '#222',
 
 
         'page' : 'var(--page-bg-color)',

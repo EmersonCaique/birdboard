@@ -21,7 +21,7 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 
-<body class="bg-page theme-dark">
+<body class="bg-page theme-light">
     <div id="app">
         <nav class="bg-nav shadow-sm">
             <div class="container mx-auto">
@@ -46,8 +46,8 @@
                         </a>
                     </h1>
 
-                    <div>
-                        <!-- Right Side Of Navbar -->
+                    <div class="flex items-center">
+                        <theme-switcher></theme-switcher>
                         <ul class="navbar-nav ml-auto">
                             <!-- Authentication Links -->
                             @guest
@@ -60,26 +60,19 @@
                             </li>
                             @endif
                             @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }} <span class="caret"></span>
-                                </a>
-
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
-                                                        document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                        style="display: none;">
-                                        @csrf
-                                    </form>
+                            <div class="flex justify-center">
+                                <div class="flex items-center">
+                                    <span>
+                                        <img src="{{ gravatar_email(auth()->user()->email) }}" alt="{{ auth()->user()->name }} avatar" class="rounded-full w-8 mr-1">
+                                    </span>
+                                    <span>
+                                        {{ Auth::user()->name }}
+                                    </span>
                                 </div>
-                            </li>
+                            </div>
                             @endguest
                         </ul>
+
                     </div>
                 </div>
 

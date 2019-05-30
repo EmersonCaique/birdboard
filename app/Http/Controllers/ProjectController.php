@@ -20,6 +20,10 @@ class ProjectController extends Controller
         $project->fill($request->all());
         auth()->user()->projects()->save($project);
 
+        if ($request->wantsJson()) {
+            return ['message' => route('project.show', ['project' => $project->id])];
+        }
+
         return redirect('project');
     }
 

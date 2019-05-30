@@ -5,7 +5,8 @@
     <h2 class="text-grey text-sm">
         My Projects
     </h2>
-    <a href="{{ route('project.create')}}" class="button" @click.prevent="$modal.show('new-project')">New project</a>
+                <a href="/projects/create" class="button" @click.prevent="$modal.show('new-project')">New Project</a>
+
 </header>
 
 <div class="lg:flex lg:flex-wrap -mx-3">

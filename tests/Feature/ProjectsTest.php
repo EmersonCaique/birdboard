@@ -6,6 +6,7 @@ use Tests\TestCase;
 use Facades\Tests\Setup\ProjectFactory;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Project;
 
 class ProjectsTest extends TestCase
 {
@@ -175,5 +176,21 @@ class ProjectsTest extends TestCase
         $project = factory('App\Project')->raw(['description' => '']);
         $request = $this->post('project', $project);
         $request->assertSessionHasErrors('description');
+    }
+
+    /** @test */
+    public function tasks_can_be_include_as_part_new_project_creation()
+    {
+        $this->auth();
+
+        $attributes = factory('App\Project')->raw();
+        $attributes['tasks'] = [
+            ['body' => 'task 1'],
+            ['body' => 'task 2'],
+        ];
+        $request = $this->post('project', $attributes);
+        $request->assertStatus(302);
+
+        $this->assertCount(2, Project::first()->tasks);
     }
 }

@@ -1,6 +1,6 @@
 <template>
-   <modal name="new-project" class="card rounded-lg" height="auto">
-       <form @submit.prevent="submit">
+    <modal name="new-project" height="auto">
+        <form @submit.prevent="submit">
             <div class="p-6">
                 <h1 class="text-center font-normal text-2xl mb-12 ">Lets start somenthing new</h1>
 
@@ -8,35 +8,28 @@
                     <div class="mr-4 flex-1">
                         <div class="p-4">
                             <label for="title" class="mb-2 block text-normal">Title</label>
-                            <input
-                            type="text"
-                            class="p-2 border rounded block w-full"
-                            :class="errors.title ?  'border-red' : 'border-grey'"
-                            placeholder="Try learn piano " v-model="form.title">
+                            <input type="text" class="p-2 border rounded block w-full"
+                                :class="form.errors.title ?  'border-red' : 'border-grey'" placeholder="Try learn piano "
+                                v-model="form.title">
 
-                            <span class="text-xs italic text-red" v-if="errors.title" v-text="errors.title[0]"></span>
+                            <span class="text-xs italic text-red" v-if="form.errors.title" v-text="form.errors.title[0]"></span>
                         </div>
 
                         <div class="p-4">
                             <label for="description" class="mb-2 block text-normal">Description</label>
-                            <textarea
-                                class="p-2 border rounded block w-full"
-                                :class="errors.description ?  'border-red' : 'border-grey'"
-                                placeholder="Try learn piano "
-                                v-model="form.description"
-                                rows="7"></textarea>
-                            <span class="text-xs italic text-red" v-if="errors.description" v-text="errors.description[0]"></span>
+                            <textarea class="p-2 border rounded block w-full"
+                                :class="form.errors.description ?  'border-red' : 'border-grey'"
+                                placeholder="Try learn piano " v-model="form.description" rows="7"></textarea>
+                            <span class="text-xs italic text-red" v-if="form.errors.description"
+                                v-text="form.errors.description[0]"></span>
 
                         </div>
                     </div>
                     <div class="ml-4 flex-1">
                         <div class="p-4">
                             <label class="mb-2 block text-normal">Need some tasks?</label>
-                            <input
-                                type="text"
-                                class="p-2 border border-grey rounded block w-full mb-1"
-                                v-model="form.tasks[index].value"
-                                placeholder="Try learn piano"
+                            <input type="text" class="p-2 border border-grey rounded block w-full mb-1"
+                                v-model="form.tasks[index].body" placeholder="Try learn piano"
                                 v-for="(task, index) in form.tasks" :key="index">
                         </div>
 
@@ -60,35 +53,42 @@
                     <button class="button ml-2" type="submit">Create Projcet</button>
                 </div>
             </div>
-       </form>
+        </form>
     </modal>
 </template>
 <script>
-export default {
-    data(){
-        return {
-            form: {
-                title: '',
-                description: '',
-                tasks: [
-                    { value: ''}
-                ]
-            },
-            errors: {}
-        }
-    },
-    methods: {
-        addTask(){
-            this.form.tasks.push({ value: ''})
+    import BirdboardForm  from '../BirdboardForm'
+    export default {
+        data() {
+            return {
+                form: new BirdboardForm({
+                    title: '',
+                    description: '',
+                    tasks: [{
+                        body: ''
+                    }, ]
+                }),
+            }
         },
-        submit(){
-            axios.post('project', this.form)
-                .then( res => {
-                    location = res.data.message;
+        methods: {
+            addTask() {
+                this.form.tasks.push({
+                    body: ''
                 })
-                .catch( error => this.errors = error.response.data.errors)
+            },
+            async submit() {
+                try {
+                    location = (await axios.post('/project', this.form)).data.message;
+                } catch (error) {
+                    this.errors = error.response.data.errors;
+                    if (!this.form.tasks[0].body) {
+                        delete this.form.originalData.tasks;
+                    }
+                    this.form.submit('/project')
+                        .then(response => location = response.data.message);
+                }
+            }
         }
     }
-}
-</script>
 
+</script>

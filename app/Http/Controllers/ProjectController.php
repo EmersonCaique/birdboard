@@ -20,6 +20,12 @@ class ProjectController extends Controller
         $project->fill($request->all());
         auth()->user()->projects()->save($project);
 
+        if ($request->has('tasks')) {
+            foreach ($request->tasks as $task) {
+                $project->addTask($task['body']);
+            }
+        }
+
         if ($request->wantsJson()) {
             return ['message' => route('project.show', ['project' => $project->id])];
         }

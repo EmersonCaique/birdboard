@@ -48,30 +48,26 @@
 
                     <div class="flex items-center">
                         <theme-switcher></theme-switcher>
-                        <ul class="navbar-nav ml-auto">
-                            <!-- Authentication Links -->
-                            @guest
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                            </li>
-                            @if (Route::has('register'))
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                            </li>
-                            @endif
-                            @else
-                            <div class="flex justify-center">
-                                <div class="flex items-center">
-                                    <span>
-                                        <img src="{{ gravatar_email(auth()->user()->email) }}" alt="{{ auth()->user()->name }} avatar" class="rounded-full w-8 mr-1">
-                                    </span>
-                                    <span>
-                                        {{ Auth::user()->name }}
-                                    </span>
-                                </div>
-                            </div>
-                            @endguest
-                        </ul>
+                        <dropdown align="right" width="200px">
+                            <template v-slot:trigger>
+                                <button
+                                    class="flex items-center text-default no-underline text-sm focus:outline-none"
+                                    v-pre>
+                                    <img width="35"
+                                         class="rounded-full mr-3"
+                                         src="{{ gravatar_email(auth()->user()->email) }}">
+
+                            {{ auth()->user()->name }}
+                        </a>
+                                </button>
+                            </template>
+
+                            <form class="p-2" id="logout-form" method="POST" action="/logout">
+                                @csrf
+
+                                <button type="submit" class="dropdown-menu-link w-full text-left">Logout</button>
+                            </form>
+                        </dropdown>
 
                     </div>
                 </div>

@@ -4455,6 +4455,14 @@ video {
   box-shadow: 0 2px 7px 0 #47cdff;
 }
 
+.button.is-outline {
+  background-color: var(--card-bg-color);
+  border-width: 1px;
+  border-color: #47cdff;
+  color: #47cdff;
+  box-shadow: none;
+}
+
 .card {
   background-color: #ffff;
   padding: 1.25rem;

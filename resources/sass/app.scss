@@ -24,6 +24,10 @@
 
 
     box-shadow: 0 2px 7px 0 #47cdff;
+
+    &.is-outline {
+        @apply .bg-card .border .border-blue .text-blue .shadow-none;
+    }
 }
 
 .card {
